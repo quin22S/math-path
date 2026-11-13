@@ -55,7 +55,8 @@ p{margin:0}
 .iconbtn svg{width:22px;height:22px}
 .iconbtn[aria-pressed="false"]{color:var(--muted)}
 .textbtn{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:7px 12px;font-family:var(--display);font-weight:500;font-size:15px}
-@media (max-width:430px){.top.has-chip .brand span{display:none}}
+@media (max-width:430px){.top.has-chip .brand span{display:none}.top.has-back #gradeChip{display:none!important}}
+.ptable td.checks{font-variant-numeric:tabular-nums;font-size:14px;min-width:64px}
 @media (max-width:340px){.brand span{display:none}}
 
 .goal{flex-basis:100%;display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:500;font-size:14px;color:var(--muted)}
@@ -73,6 +74,25 @@ p{margin:0}
 .stat{flex:1 1 120px;background:var(--soft);border-radius:14px;padding:12px}
 .stat b{display:block;font-family:var(--display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
 .stat span{font-size:13px;color:var(--muted)}
+
+.backbtn{display:inline-flex;align-items:center;gap:2px;border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 12px 6px 6px;font-family:var(--display);font-weight:600;font-size:16px;min-height:40px}
+.backbtn svg{width:22px;height:22px}
+.stepper{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.stepper li{font-family:var(--display);font-weight:500;font-size:12px;text-align:center;padding:6px 1px;border-radius:10px;background:var(--soft);color:var(--muted)}
+.stepper li.done{background:var(--good-bg);color:var(--good)}
+.stepper li.now{background:var(--tens);color:var(--on-accent)}
+.hands{border:2px dashed var(--ones);border-radius:16px;padding:14px 16px;background:color-mix(in srgb,var(--ones) 10%,var(--surface))}
+.hands p:last-child{font-size:18px}
+.example .ansline{font-family:var(--display);font-weight:600;font-size:22px}
+.hintrow{display:flex;justify-content:center}
+.stars3{display:inline-flex;gap:1px;vertical-align:-3px}
+.stars3 svg{width:15px;height:15px}
+.celebrate .stars3 svg{width:34px;height:34px}
+.st-learned .node{background:var(--good-bg);border-color:var(--star);color:var(--ink)}
+.t-tag .stars3{margin-left:4px}
+.btn.small{font-size:16px;min-height:44px;padding:8px 18px}
+.streak{display:flex;align-items:center;gap:8px}
+.streak .small{color:var(--muted)}
 
 /* generic */
 .card{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:20px}
@@ -254,7 +274,7 @@ svg.v{max-width:100%;height:auto;display:block}
 .pill.lock{background:var(--soft);color:var(--muted)}
 .pill.gold{background:color-mix(in srgb,var(--star) 30%,var(--surface));color:var(--ink)}
 .miss{font-size:14px;color:var(--muted);margin-top:4px}
-.prompt-box{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:12px;max-height:260px;overflow:auto;border:2px solid var(--line)}
+.prompt-box{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;background:var(--soft);border-radius:12px;padding:12px;max-height:260px;overflow:auto;border:2px solid var(--line)}
 .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .switch{width:56px;height:32px;border-radius:99px;border:0;background:var(--line);position:relative;flex:none}
 .switch::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--surface);transition:left .15s}
@@ -267,6 +287,7 @@ svg.v{max-width:100%;height:auto;display:block}
 
 <div id="app">
   <header class="top">
+    <button id="backBtn" class="backbtn" data-act="back" hidden aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
     <div class="brand">
       <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="3" width="7" height="24" rx="2" class="f-tens"/><rect x="11" y="3" width="7" height="24" rx="2" class="f-tens"/><rect x="21" y="20" width="7" height="7" rx="2" class="f-ones"/><rect x="21" y="11" width="7" height="7" rx="2" class="f-ones"/></svg>
       <span>Math Path</span>
@@ -940,6 +961,39 @@ mod({ id: 'g3-perim', g: 3, title: 'Perimeter', can: 'I can find the perimeter b
     return numQ({ story: s, ask: 'How wide?', say: s, answer: W, unit: u, hint: `Two lengths: ${L} + ${L} = ${2 * L}. The two widths make the rest. Split it in half.`, explain: `${P} ${MI} ${2 * L} = ${2 * W}. Half of ${2 * W} is ${W} ${ul}.` });
   } });
 
+const HANDS = {
+  'g1-count': 'Put your finger on 95 on your hundreds chart and count out loud to 100. Then keep going without the chart: 101, 102, all the way to 120.',
+  'g1-tens': 'Use your blocks. Make 47 with 4 tens rods and 7 ones cubes. Now make 74. Which one needs more rods?',
+  'g1-compare': 'Build 36 and 63 with your blocks. Which pile has more tens rods? That number is greater.',
+  'g1-coins': 'Lay out a penny, a nickel, a dime, and a quarter from your play money. Say each name and how many cents it is worth.',
+  'g1-add20': 'Put out 8 ones cubes and 5 more. Move 2 cubes over to make 10. How many are left over? Now count them all.',
+  'g1-sub20': 'Put out 13 ones cubes. Take away 5. Count how many are left.',
+  'g1-missing': 'Put out 8 cubes. Add cubes one at a time until you have 13. How many did you add?',
+  'g1-story': 'Act out a story with cubes: there were 12 birds and 5 flew away. Take 5 away and count what is left.',
+  'g1-tenmore': 'On your hundreds chart, put a finger on 34. Move down one row. That is 10 more. Move up one row. That is 10 less.',
+  'g1-add100': 'Build 32 and 15 with your blocks. Push the rods together and the cubes together. Count rods by tens, then count on the cubes.',
+  'g1-newten': 'Build 14 and 28. Push the cubes together. When you have 10 cubes, trade them for 1 tens rod. Now count.',
+  'g2-skip': 'On your hundreds chart, put a coin on 5, 10, 15, 20 and keep going. What pattern do the coins make?',
+  'g2-pv': 'Build 346 with 3 flats, 4 rods, and 6 cubes. Then build 507. How many rods do you use for 507?',
+  'g2-compare': 'Build 452 and 425 with your blocks. Compare the flats first, then the rods.',
+  'g2-coins': 'Grab a handful of play coins. Line them up from biggest value to smallest. Count quarters by 25s, dimes by 10s, nickels by 5s, pennies by 1s.',
+  'g2-add': 'Build 38 and 45 with blocks. Push them together. 13 cubes? Trade 10 cubes for a rod, then count.',
+  'g2-sub': 'Build 52. Now take away 17. Not enough cubes? Trade 1 rod for 10 cubes first.',
+  'g2-twostep': 'Act it out with cubes: start with 18, add 6 more, then take away 4.',
+  'g2-dollars': 'Play store! Lay out two $1 bills, a quarter, and a dime. Count the bills first, then the coins. Say it like this: 2 dollars and 35 cents.',
+  'g2-evenodd': 'Grab 7 cubes and make pairs. Is one left over? Try 8 cubes.',
+  'g2-groups': 'Make 3 groups of 4 cubes. Count them all. Now line them up in 3 rows of 4.',
+  'g3-round': 'Find 47 on your hundreds chart. Is it closer to 40 or to 50?',
+  'g3-addsub': 'Build 452 and 175 with flats, rods, and cubes. Push them together. Trade 10 rods for 1 flat when you can.',
+  'g3-mult': 'Make 3 groups of 4 cubes. That is 3 × 4. Count them all.',
+  'g3-facts1': 'Make 4 rows of 5 cubes. Count by 5s down the rows to find 4 × 5.',
+  'g3-facts2': 'Make 6 rows of 7 cubes. Split it into 5 rows and 1 row. Count each part, then add.',
+  'g3-div': 'Share 12 cubes into 3 equal piles, one cube at a time. How many are in each pile?',
+  'g3-muldivstory': 'Act it out with cubes: 5 bags with 4 apples in each. How many apples?',
+  'g3-area': 'On the blank side of a hundreds chart, cover a rectangle 5 squares long and 3 squares tall with cubes. Count the cubes.',
+  'g3-perim': 'On the blank side of a hundreds chart, use a dry-erase marker to draw a rectangle 6 squares long and 4 squares tall. Count the square edges all the way around.'
+};
+
 const ORDER = M.map(m => m.id);
 const BYID = Object.fromEntries(M.map(m => [m.id, m]));
 const G1 = M.filter(m => m.g === 1).map(m => m.id);
@@ -948,13 +1002,47 @@ const ASSESS_N = G1.length * 2;
 
 /* ================= state + storage ================= */
 let S = null, RUN = null, SCREEN = 'loading', DATA = {}, PREV = null;
-function fresh() { return { v: 1, name: '', updatedAt: 0, settings: { speak: true }, phase: 'welcome', assess: { answers: [], startedAt: null, doneAt: null }, mods: {}, hist: [], stars: 0 }; }
-function mstate(id) { if (!S.mods[id]) S.mods[id] = { st: 'todo', streak: 0, fails: 0, rounds: 0, asked: 0, right: 0, at: null }; return S.mods[id]; }
-const isDone = id => ['placed', 'mastered'].includes(mstate(id).st);
+const PRACTICE_TARGET = 8, CHECK_N = 10, CHECK_PASS = 9, REVIEW_N = 8, REVIEW_PASS = 7, KEEP_N = 5, KEEP_PASS = 4, REVIEWS_PER_DAY = 2;
+const GAP_REMEMBER = 2, GAP_MASTER = 7, KEEP_GAPS = [30, 60, 120], DAY = 86400000;
+const STAR_NAME = ['Not learned yet', 'Learned', 'Remembered', 'Mastered'];
+const REVIEW_LABEL = { remember: 'Remember check', master: 'Mastery check', keep: 'Keep-sharp review' };
+const startOfDay = (t = Date.now()) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const inDays = d => startOfDay() + d * DAY;
+function fresh() { return { v: 3, name: '', updatedAt: 0, settings: { speak: true }, phase: 'welcome', assess: { answers: [], startedAt: null, doneAt: null }, mods: {}, hist: [], stars: 0 }; }
+const MDEF = () => ({ st: 'todo', stage: 'learn', placed: false, stars: 0, streak: 0, rounds: 0, asked: 0, right: 0, at: null, learnedAt: null, masteredAt: null, keep: 0, due: null, checks: [], reviews: [] });
+function mstate(id) { if (!S.mods[id]) S.mods[id] = MDEF(); const m = S.mods[id], d = MDEF(); for (const k in d) if (m[k] === undefined) m[k] = d[k]; return m; }
+const isDone = id => mstate(id).stars >= 1;
+const isMastered = id => mstate(id).stars >= 3;
 const currentId = () => ORDER.find(id => !isDone(id)) || null;
+const totalStars = () => S ? ORDER.reduce((a, id) => a + ((S.mods[id] && S.mods[id].stars) || 0), 0) : 0;
+function revToday() { const k = dayKey(); if (!S.rev || S.rev.day !== k) S.rev = { day: k, n: 0 }; return S.rev; }
+function dueReview() { if (!S || S.phase === 'welcome' || S.phase === 'assess' || revToday().n >= REVIEWS_PER_DAY) return null; const now = Date.now(); return ORDER.filter(id => { const m = mstate(id); return m.stars >= 1 && m.due && m.due <= now; }).sort((a, b) => mstate(a).due - mstate(b).due)[0] || null; }
+function reviewKind(id) { const n = mstate(id).stars; return n >= 3 ? 'keep' : n === 2 ? 'master' : 'remember'; }
+function migrate(st) {
+  if (st.v === 1) {
+    for (const id in st.mods) { const m = st.mods[id];
+      if (m.st === 'placed') { m.st = 'todo'; m.stage = 'check'; m.placed = true; }
+      else if (m.st === 'mastered') { m.st = 'todo'; m.stage = 'check'; m.placed = false; }
+      else m.stage = m.rounds ? 'practice' : 'learn';
+      m.streak = 0; m.due = null; m.checks = m.checks || []; m.reviews = m.reviews || [];
+    }
+    if (st.phase === 'done') st.phase = 'path';
+    st.v = 2;
+  }
+  if (st.v === 2) {
+    for (const id in st.mods) { const m = st.mods[id];
+      if (m.st === 'mastered') { m.stars = 1; m.st = 'learned'; m.learnedAt = m.at || Date.now(); m.due = startOfDay(m.learnedAt) + GAP_REMEMBER * DAY; }
+      else { m.stars = 0; m.st = 'todo'; }
+      m.keep = 0; delete m.box;
+    }
+    if (st.phase === 'done') st.phase = 'path';
+    st.v = 3;
+  }
+  return st;
+}
 let DB = null, dbWritable = true, dbBusy = false, dbPending = false, saveWhere = 'device';
-function saveLocal() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
-function save() { S.updatedAt = Date.now(); saveLocal(); dbSave(); }
+function saveLocal() { if (VIEW) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+function save() { if (VIEW) return; S.updatedAt = Date.now(); saveLocal(); dbSave(); syncSoon(); }
 async function dbSave() {
   if (!DB || !dbWritable) return; if (dbBusy) { dbPending = true; return; } dbBusy = true;
   const body = JSON.parse(JSON.stringify(S));
@@ -995,10 +1083,26 @@ function topbar() {
   let label = '';
   if (S) { if (S.phase === 'assess') label = 'Math check'; else if (S.phase === 'path') { const c = currentId(); label = c ? GNAME[BYID[c].g] : 'All done'; } else if (S.phase === 'done') label = '3rd grade done'; }
   gc.textContent = label; gc.hidden = !label; document.querySelector('.top').classList.toggle('has-chip', !!label);
-  if (S && S.stars > 0) { sc.hidden = false; sc.innerHTML = `${IC.star}<span>${S.stars}</span>`; sc.setAttribute('aria-label', `${S.stars} stars`); } else sc.hidden = true;
-  const on = !S || S.settings.speak; sb.innerHTML = on ? IC.spk : IC.mute; sb.setAttribute('aria-pressed', String(on)); sb.setAttribute('aria-label', on ? 'Read aloud is on' : 'Read aloud is off'); sb.hidden = !CAN_SPEAK;
-  document.getElementById('parentBtn').hidden = !S || SCREEN === 'loading';
+  const ts = totalStars(); if (ts > 0) { sc.hidden = false; sc.innerHTML = `${IC.star}<span>${ts}</span>`; sc.setAttribute('aria-label', `${ts} stars`); } else sc.hidden = true;
+  const on = !S || S.settings.speak; sb.innerHTML = on ? IC.spk : IC.mute; sb.setAttribute('aria-pressed', String(on)); sb.setAttribute('aria-label', on ? 'Read aloud is on' : 'Read aloud is off'); sb.hidden = !CAN_SPEAK || !!VIEW;
+  document.getElementById('parentBtn').hidden = !S || SCREEN === 'loading' || !!VIEW;
+  const ba = S && !VIEW ? backAction() : null, bb = document.getElementById('backBtn'), onPath = S && (S.phase === 'path' || S.phase === 'done');
+  bb.hidden = !ba; document.querySelector('.brand').hidden = !!ba; document.querySelector('.top').classList.toggle('has-back', !!ba); bb.lastChild.textContent = onPath ? 'My path' : 'Back'; bb.setAttribute('aria-label', onPath ? 'Back to my learning path' : 'Back');
   updateGoalUI();
+}
+function backAction() {
+  if (VIEW || !S) return null;
+  if (S.phase === 'welcome' || S.phase === 'assess') {
+    switch (SCREEN) {
+      case 'q': return () => { hush(); RUN = null; save(); go('assessIntro'); };
+      case 'assessBreak': return () => go('assessIntro');
+      case 'assessIntro': return () => go('welcome');
+      case 'parent': return () => ACT.closeParent();
+      default: return null;
+    }
+  }
+  if (SCREEN === 'map' || SCREEN === 'loading') return null;
+  return () => { hush(); RUN = null; PREV = null; save(); go('map'); };
 }
 function go(screen, data = {}) { SCREEN = screen; DATA = data; render(); window.scrollTo({ top: 0 }); }
 function render() {
@@ -1009,10 +1113,10 @@ function render() {
 }
 function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 1100); }
 
-function homeScreen() { if (!S || S.phase === 'welcome') return 'welcome'; if (S.phase === 'assess') return 'assessIntro'; if (S.phase === 'done') return 'final'; return 'map'; }
+function homeScreen() { if (!S || S.phase === 'welcome') return 'welcome'; if (S.phase === 'assess') return 'assessIntro'; if (S.phase === 'done') return dueReview() ? 'map' : 'final'; return 'map'; }
 
 function qHTML(q, ctx) {
-  const final = RUN.fb && RUN.fb.kind !== 'hint';
+  const final = isFinal();
   let h = `<section class="card stack" aria-label="Question">`;
   h += `<div class="qmeta">${ctx.meta}</div>`;
   if (q.review) h += `<div><span class="chip review-chip">Review: ${esc(q.review)}</span></div>`;
@@ -1037,6 +1141,7 @@ function qHTML(q, ctx) {
       return `<button class="${cls}" data-act="choose" data-v="${esc(c.v)}" ${dis ? 'disabled' : ''}>${c.html || ''}${c.label ? `<span>${esc(c.label)}</span>` : ''}${c.sub ? `<span class="sub">${c.sub}</span>` : ''}</button>`;
     }).join('') + `</div>`;
   }
+  if (hintsOK() && !RUN.fb) h += `<div class="hintrow"><button class="btn ghost small" data-act="hint">Show me a hint</button></div>`;
   if (RUN.fb) h += fbHTML(q, RUN.fb);
   h += `</section>`;
   return h;
@@ -1044,6 +1149,7 @@ function qHTML(q, ctx) {
 function answerLabel(q) { if (q.type === 'num') return `${q.answer}${q.unit ? (q.unit === '¢' ? '¢' : ' ' + q.unit) : ''}`; const c = q.choices.find(c => c.v === q.answer); return c ? (c.html && !c.label ? c.html : esc(c.label)) : esc(q.answer); }
 function answerSay(q) { if (q.type === 'num') return `${q.answer}${q.unit === '¢' ? ' cents' : q.unit === 'min' ? ' minutes' : ''}`; if (q.fracs) { const [a, b] = q.answer.split('/').map(Number); return FW[b] ? frSay(a, b) : `${a} over ${b}`; } const c = q.choices.find(c => c.v === q.answer); return c && c.label ? c.label : q.answer; }
 function fbHTML(q, fb) {
+  if (fb.kind === 'hint0') return `<div class="fb show" role="status"><h3>Here's a hint</h3><p>${q.hint}</p></div>`;
   if (fb.kind === 'hint') return `<div class="fb hint" role="status"><h3>Not quite. Here's a hint.</h3><p>${q.hint}</p><p class="small muted">Try again!</p></div>`;
   if (fb.kind === 'right') return `<div class="fb right" role="status"><h3>${fb.msg}</h3><p class="ex">${q.explain}</p></div><button class="btn block" data-act="next">Next</button>`;
   if (fb.kind === 'fixed') return `<div class="fb right" role="status"><h3>You fixed it!</h3><p class="ex">${q.explain}</p></div><button class="btn block" data-act="next">Next</button>`;
@@ -1051,6 +1157,19 @@ function fbHTML(q, fb) {
 }
 function roundDots() { return `<div class="dots" aria-label="Question ${RUN.i + 1} of ${RUN.qs.length}">${RUN.qs.map((_, i) => `<span class="dot ${i < RUN.first.length ? (RUN.first[i] ? 'ok' : 'miss') : i === RUN.i ? 'now' : ''}"></span>`).join('')}</div>`; }
 
+function stepper(st) { const steps = ['Learn', 'Practice', 'Check', 'Remember', 'Master']; const idx = st.stars >= 3 ? 5 : st.stars === 2 ? 4 : st.stars === 1 ? 3 : st.stage === 'check' ? 2 : st.stage === 'practice' ? 1 : 0; return `<ol class="stepper" aria-label="Steps to master this">${steps.map((x, i) => `<li class="${i < idx ? 'done' : i === idx ? 'now' : ''}">${x}</li>`).join('')}</ol>`; }
+function starRow(n) { return `<span class="stars3" aria-label="${n} of 3 stars">${[0, 1, 2].map(i => i < n ? IC.star : IC.starO).join('')}</span>`; }
+function streakDots(n) { const s = Math.min(n, PRACTICE_TARGET); return `<div class="streak"><span class="small">In a row</span><div class="dots" aria-label="${s} of ${PRACTICE_TARGET} in a row">${Array.from({ length: PRACTICE_TARGET }, (_, i) => `<span class="dot ${i < s ? 'ok' : ''}"></span>`).join('')}</div></div>`; }
+const fmtDay = t => new Date(t).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+const dueText = m => !m.due ? 'soon' : m.due <= Date.now() ? 'ready now' : 'on ' + fmtDay(m.due);
+function stageText(id) { const m = mstate(id);
+  if (m.stars >= 3) return 'Mastered! It comes back now and then to stay sharp.';
+  if (m.stars === 2) return `Remembered! The mastery check is ${dueText(m)}. Pass it to master this.`;
+  if (m.stars === 1) return `Learned! The remember check is ${dueText(m)}. Pass it for your second star.`;
+  if (m.stage === 'check') return m.placed ? `You knew this on your math check. Pass the ${CHECK_N}-question check to prove it!` : `You're ready for the check: ${CHECK_N} questions, no hints. Get ${CHECK_PASS} right to learn it!`;
+  if (m.stage === 'practice') return `Get ${PRACTICE_TARGET} in a row on your own, with no hints, to unlock the check.`;
+  return BYID[id].can; }
+const KLABEL = { practice: 'Practice', free: 'Practice', check: 'Check', review: 'Check', remember: 'Remember check', master: 'Mastery check', keep: 'Keep-sharp review', mod: 'Practice' };
 const VIEWS = {
   loading: () => `<div class="card"><p class="muted">Getting your path ready…</p></div>`,
   welcome: () => `<section class="card hero">
@@ -1075,7 +1194,7 @@ const VIEWS = {
     const q = RUN.qs[RUN.i];
     let meta;
     if (RUN.kind === 'assess') { const n = S.assess.answers.length; meta = `<span class="eyebrow">Math check · ${n + 1} of ${ASSESS_N}</span><div class="bar" style="flex:1;min-width:90px;max-width:180px"><i style="width:${n / ASSESS_N * 100}%"></i></div>`; }
-    else meta = `<span class="eyebrow">${RUN.kind === 'practice' ? 'Practice · ' : ''}${esc(BYID[RUN.id].title)}</span>${roundDots()}`;
+    else { const lbl = RUN.kind === 'review' ? REVIEW_LABEL[RUN.rk] : KLABEL[RUN.kind]; meta = `<span class="eyebrow">${lbl} · ${esc(BYID[RUN.id].title)}${RUN.kind === 'check' || RUN.kind === 'review' ? ` · ${RUN.i + 1} of ${RUN.qs.length}` : ''}</span>${RUN.kind === 'practice' ? streakDots(mstate(RUN.id).streak) : roundDots()}`; }
     return qHTML(q, { meta, kind: RUN.kind });
   },
   assessBreak: () => { const r = S.assess.answers.length / 4, total = ASSESS_N / 4;
@@ -1085,152 +1204,220 @@ const VIEWS = {
       <p>Stand up and stretch. Ready for the next 4?</p>
       <button class="btn block" data-act="assessGo">Next round</button>
     </section>`; },
-  assessDone: () => { const known = G1.filter(id => S.mods[id] && S.mods[id].st === 'placed'), c = currentId();
+  assessDone: () => { const known = G1.filter(id => mstate(id).placed), c = currentId();
     return `<section class="card stack celebrate">
       ${IC.burst}
       <h1>All done, ${esc(S.name || 'friend')}!</h1>
-      <p>You already know <b>${known.length} of ${G1.length}</b> first-grade skills.${known.length === G1.length ? ' Wow! You get to start 2nd grade.' : ''}</p>
+      <p>You already know <b>${known.length} of ${G1.length}</b> first-grade skills. For those, you'll take a check to prove it. The rest you'll learn step by step.</p>
       ${c ? `<p>Your path starts with <b>${esc(BYID[c].title)}</b>.</p>` : ''}
       <button class="btn block" data-act="toMap">See my path</button>
     </section>`; },
   map: () => {
-    const c = currentId(); if (!c) return VIEWS.final();
-    const cm = BYID[c], st = mstate(c);
-    let h = `<section class="card nextcard">
-      <p class="eyebrow">${esc(S.name ? `${S.name}'s next lesson` : 'Next lesson')} · ${GNAME[cm.g]}</p>
-      <h1>${esc(cm.title)}</h1>
-      <p>${esc(cm.can)}</p>
-      ${st.streak === 1 ? `<p class="small" style="color:var(--good);font-weight:700">One more good round and you master it!</p>` : ''}
-      <button class="btn block" data-act="openMod" data-id="${c}">${st.rounds ? 'Keep going' : 'Start'}</button>
-    </section>`;
+    const rv = dueReview(), c = currentId();
+    if (!rv && !c) return VIEWS.final();
+    let h;
+    if (rv) { const rm = BYID[rv], rk = reviewKind(rv);
+      const info = { remember: `You learned this a couple of days ago. Show you still remember it to earn your second star: ${REVIEW_N} questions, no hints.`, master: `Pass this check to master it and earn your third star: ${REVIEW_N} questions, no hints.`, keep: `You mastered this. A quick ${KEEP_N}-question review keeps it sharp.` }[rk];
+      h = `<section class="card nextcard">
+        <p class="eyebrow">${REVIEW_LABEL[rk]} · before new learning</p>
+        <h1>${esc(rm.title)}</h1>
+        <div>${starRow(mstate(rv).stars)}</div>
+        <p>${info}</p>
+        <button class="btn block" data-act="startRound" data-id="${rv}" data-kind="review">Start the ${REVIEW_LABEL[rk].toLowerCase()}</button>
+      </section>`; }
+    else { const cm = BYID[c], st = mstate(c), label = st.stage === 'check' ? 'Take the check' : st.stage === 'practice' ? 'Keep practicing' : 'Start lesson';
+      h = `<section class="card nextcard">
+        <p class="eyebrow">${esc(S.name ? `${S.name}'s next lesson` : 'Next lesson')} · ${GNAME[cm.g]}</p>
+        <h1>${esc(cm.title)}</h1>
+        ${stepper(st)}
+        <p>${esc(stageText(c))}</p>
+        ${st.stage === 'practice' ? streakDots(st.streak) : ''}
+        <button class="btn block" data-act="openMod" data-id="${c}">${label}</button>
+      </section>`; }
     let num = 0;
     for (const g of [1, 2, 3]) {
-      const ids = ORDER.filter(id => BYID[id].g === g), done = ids.filter(isDone).length;
-      h += `<section class="grade"><div class="grade-h"><h2>${GNAME[g]}</h2><span class="small muted">${done} of ${ids.length} done</span></div><ol class="trail">`;
+      const ids = ORDER.filter(id => BYID[id].g === g), learned = ids.filter(isDone).length, mast = ids.filter(isMastered).length;
+      h += `<section class="grade"><div class="grade-h"><h2>${GNAME[g]}</h2><span class="small muted">${mast} mastered · ${learned} learned of ${ids.length}</span></div><ol class="trail">`;
       for (const id of ids) {
-        num++; const m = BYID[id], s = mstate(id); let cls, node, tag, act = '';
-        if (s.st === 'mastered') { cls = 'st-mastered'; node = IC.star; tag = 'Mastered'; act = 'openMod'; }
-        else if (s.st === 'placed') { cls = 'st-placed'; node = IC.check; tag = 'Knew it'; act = 'openMod'; }
-        else if (id === c) { cls = 'st-current'; node = String(num); tag = 'Up next'; act = 'openMod'; }
-        else { cls = 'st-locked'; node = IC.lock; tag = ''; }
-        h += `<li class="${cls}"><button class="step" ${act ? `data-act="${act}" data-id="${id}"` : 'disabled'} aria-label="${esc(m.title)}${tag ? ', ' + tag : ', locked'}"><span class="node">${node}</span><span><span class="t-title">${esc(m.title)}</span><br><span class="t-sub">${esc(m.can)}</span></span><span class="t-tag">${tag}</span></button></li>`;
+        num++; const m = BYID[id], s = mstate(id); let cls, node, tag, tagText, act = '';
+        if (s.stars >= 1) { cls = s.stars >= 3 ? 'st-mastered' : 'st-learned'; node = IC.star; tagText = STAR_NAME[s.stars]; tag = `${tagText}${starRow(s.stars)}`; act = 'openMod'; }
+        else if (id === c) { cls = 'st-current'; node = String(num); tagText = tag = s.stage === 'check' ? 'Check time' : s.stage === 'practice' ? 'Practicing' : 'Up next'; act = 'openMod'; }
+        else if (s.placed) { cls = 'st-placed'; node = IC.check; tagText = tag = 'Knew it'; }
+        else { cls = 'st-locked'; node = IC.lock; tagText = tag = ''; }
+        h += `<li class="${cls}"><button class="step" ${act ? `data-act="${act}" data-id="${id}"` : 'disabled'} aria-label="${esc(m.title)}${tagText ? ', ' + tagText : ', locked'}"><span class="node">${node}</span><span><span class="t-title">${esc(m.title)}</span><br><span class="t-sub">${esc(m.can)}</span></span><span class="t-tag">${tag}</span></button></li>`;
       }
       h += `</ol></section>`;
     }
     return h;
   },
-  lesson: ({ id, practice }) => {
-    const m = BYID[id], L = m.lesson;
+  lesson: ({ id, ex }) => {
+    const m = BYID[id], L = m.lesson, st = mstate(id), learned = st.stars >= 1, checkStage = !learned && st.stage === 'check';
+    const reviewNow = learned && st.due && st.due <= Date.now() && revToday().n < REVIEWS_PER_DAY;
+    const btns = learned ? `${reviewNow ? `<button class="btn block" data-act="startRound" data-id="${id}" data-kind="review">Start the ${REVIEW_LABEL[reviewKind(id)].toLowerCase()}</button>` : ''}<button class="btn ${reviewNow ? 'ghost ' : ''}block" data-act="startRound" data-id="${id}" data-kind="free">Practice for fun</button>`
+      : checkStage ? `<button class="btn block" data-act="startRound" data-id="${id}" data-kind="check">Take the check: ${CHECK_N} questions</button><button class="btn ghost block" data-act="startRound" data-id="${id}" data-kind="practice">Practice more first</button>`
+      : `<button class="btn block" data-act="startRound" data-id="${id}" data-kind="practice">${st.rounds ? 'Keep practicing' : "Let's practice"}</button>`;
+    const exHTML = ex ? `<div class="example stack"><p class="eyebrow">Watch me do one</p>${ex.story ? `<p class="story">${ex.story}</p>` : ''}<p><b>${ex.ask}</b></p>${ex.big ? `<div class="big${ex.bigWords ? ' words' : ''}">${ex.big}</div>` : ''}${ex.visual ? `<div class="visual">${ex.visual}</div>` : ''}<div class="ansline">Answer: ${answerLabel(ex)}</div><p class="ex">${ex.explain}</p><div><button class="btn ghost small" data-act="anotherEx">Show me another one</button></div></div>` : '';
+    const hands = HANDS[id] ? `<div class="hands stack"><p class="eyebrow">Try it with your things at home</p><p>${esc(HANDS[id])}</p></div>` : '';
+    const top = checkStage || learned;
     return `<section class="card stack">
-      <div class="qmeta"><span class="eyebrow">${practice ? 'Practice' : 'Lesson'} · ${GNAME[m.g]}</span>${CAN_SPEAK ? `<button class="saybtn" data-act="sayLesson" data-id="${id}" aria-label="Read the lesson to me">${IC.spk}</button>` : ''}</div>
+      <div class="qmeta"><span class="eyebrow">${learned ? STAR_NAME[st.stars] : 'Lesson'} · ${GNAME[m.g]}</span>${CAN_SPEAK ? `<button class="saybtn" data-act="sayLesson" data-id="${id}" aria-label="Read the lesson to me">${IC.spk}</button>` : ''}</div>
       <h1>${esc(m.title)}</h1>
-      <p class="muted">${esc(m.can)}</p>
+      ${stepper(st)}
+      ${top ? `<p style="font-weight:700">${esc(stageText(id))}</p>${btns}` : `<p class="muted">${esc(m.can)}</p>`}
       ${L.visual ? `<div class="visual">${L.visual()}</div>` : ''}
-      <ol class="lesson-steps">${L.steps.map(s => `<li><span>${esc(s)}</span></li>`).join('')}</ol>
+      <ol class="lesson-steps">${L.steps.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ol>
       ${L.tip ? `<p class="tip">${esc(L.tip)}</p>` : ''}
-      <button class="btn block" data-act="startRound" data-id="${id}" data-practice="${practice ? 1 : 0}">${practice ? 'Practice 4 questions' : "Let's practice"}</button>
-      <button class="btn ghost block" data-act="toMap">Back to my path</button>
+      ${exHTML}
+      ${hands}
+      ${top ? '' : btns}
     </section>`;
   },
-  roundEnd: ({ id, score, practice, pass, streak, relesson }) => {
-    const m = BYID[id];
-    const stars = `<div class="stars-row">${RUN.first.map(ok => ok ? IC.star : IC.starO).join('')}</div>`;
-    let msg, btns;
-    if (practice) { msg = `${score} of 4 on the first try.`; btns = `<button class="btn block" data-act="startRound" data-id="${id}" data-practice="1">Practice again</button><button class="btn ghost block" data-act="toMap">Back to my path</button>`; }
-    else if (pass) { msg = `${score} of 4 on the first try! One more round like that and you master ${esc(m.title)}.`; btns = `<button class="btn block" data-act="startRound" data-id="${id}" data-practice="0">Next round</button><button class="btn ghost block" data-act="toMap">Take a break</button>`; }
-    else if (relesson) { msg = `${score} of 4 this time. Let's look at the lesson again. Then we'll practice more.`; btns = `<button class="btn block" data-act="openMod" data-id="${id}">See the lesson</button><button class="btn ghost block" data-act="toMap">Take a break</button>`; }
-    else { msg = `${score} of 4 this time. You need 3 to pass a round. Let's try another round!`; btns = `<button class="btn block" data-act="startRound" data-id="${id}" data-practice="0">Try another round</button><button class="btn ghost block" data-act="openMod" data-id="${id}">See the lesson again</button>`; }
-    return `<section class="card stack celebrate">${stars}<h2>${pass || practice ? (score === 4 ? 'Perfect round!' : 'Nice work!') : 'Good try!'}</h2><p>${msg}</p>${btns}</section>`;
+  roundEnd: ({ id, k, score, n, ready, pass, rk, need }) => {
+    const m = BYID[id], st = mstate(id), t = esc(m.title);
+    const stars = `<div class="stars-row">${(RUN && RUN.first ? RUN.first : []).map(ok => ok ? IC.star : IC.starO).join('')}</div>`;
+    const bPractice = (lbl = 'Practice more', cls = 'btn block') => `<button class="${cls}" data-act="startRound" data-id="${id}" data-kind="practice">${lbl}</button>`;
+    const bLesson = `<button class="btn ghost block" data-act="openMod" data-id="${id}">See the lesson again</button>`;
+    const bPath = (cls = 'btn ghost block') => `<button class="${cls}" data-act="toMap">Back to my path</button>`;
+    let h2, msg, btns, extra = '', head = stars;
+    if (k === 'free') { h2 = score === n ? 'Perfect round!' : 'Nice work!'; msg = `${score} of ${n} on the first try.`; btns = `<button class="btn block" data-act="startRound" data-id="${id}" data-kind="free">Practice again</button>${bPath()}`; }
+    else if (k === 'practice') {
+      extra = streakDots(st.streak);
+      if (ready) { h2 = "You're ready for the check!"; msg = `You got ${PRACTICE_TARGET} in a row on your own. The check is ${CHECK_N} questions with no hints. Get ${CHECK_PASS} right to learn ${t}.`; btns = `<button class="btn block" data-act="startRound" data-id="${id}" data-kind="check">Take the check</button>${bPractice('Practice more first', 'btn ghost block')}${bPath()}`; }
+      else { h2 = score === n ? 'Perfect round!' : 'Keep going!'; msg = `In a row on your own: ${Math.min(st.streak, PRACTICE_TARGET)} of ${PRACTICE_TARGET}. Get ${PRACTICE_TARGET} in a row with no hints to unlock the check.`; btns = bPractice() + bLesson + bPath(); }
+    }
+    else if (k === 'check') { h2 = score >= CHECK_PASS - 1 ? 'So close!' : 'Good try!'; msg = `${score} of ${n} right. You need ${CHECK_PASS} to learn ${t}. Let's practice a little more, then try the check again.`; btns = bPractice() + bLesson + bPath(); }
+    else if (pass) {
+      if (rk === 'master') { head = IC.burst; h2 = `You mastered ${t}!`; msg = `${score} of ${n} right. Third star earned. It will come back now and then to stay sharp.`; }
+      else if (rk === 'remember') { h2 = 'You remembered it!'; msg = `${score} of ${n} right on ${t}. Second star earned! The mastery check comes in about a week.`; }
+      else { h2 = 'Still sharp!'; msg = `${score} of ${n} right on ${t}. It stays mastered.`; }
+      extra = `<div>${starRow(st.stars)}</div>`; btns = bPath('btn block');
+    }
+    else { h2 = "Let's practice this one again"; msg = `${score} of ${n} right on ${t}. You needed ${need}. A little more practice will make it stick. Then you can earn the stars again.`; btns = `<button class="btn block" data-act="openMod" data-id="${id}">Practice now</button>${bPath()}`; }
+    return `<section class="card stack celebrate">${head}<h2>${h2}</h2><p>${msg}</p>${extra}${btns}</section>`;
   },
-  mastered: ({ id }) => { const m = BYID[id], nx = currentId(), gradeDone = nx ? BYID[nx].g !== m.g : true;
+  mastered: ({ id, score, n }) => { const m = BYID[id], nx = currentId(), gradeDone = nx ? BYID[nx].g > m.g : true;
     return `<section class="card stack celebrate">
       ${IC.burst}
-      <p class="eyebrow">You earned a star</p>
-      <h1>You mastered ${esc(m.title)}!</h1>
+      <p class="eyebrow">First star earned</p>
+      <h1>You learned ${esc(m.title)}!</h1>
+      <div>${starRow(1)}</div>
+      <p>${score} of ${n} on the check.</p>
+      <p class="small muted">To master it: pass a remember check in ${GAP_REMEMBER} days, then a mastery check about a week after that.</p>
       ${nx && !gradeDone ? `<p>Next up: <b>${esc(BYID[nx].title)}</b>. ${esc(BYID[nx].can)}</p>` : ''}
       <button class="btn block" data-act="${gradeDone ? 'gradeDone' : 'toMap'}" data-g="${m.g}">${gradeDone ? 'Keep going' : 'Back to my path'}</button>
     </section>`; },
-  gradeDone: ({ g }) => { const nx = currentId();
+  gradeDone: ({ g }) => { const nx = currentId(), ids = ORDER.filter(id => BYID[id].g === g), mast = ids.filter(isMastered).length;
     return `<section class="cert">
       ${IC.burst}
       <p class="eyebrow">Big news</p>
-      <h1>${esc(S.name || 'You')} finished ${GNAME[g]} math!</h1>
+      <h1>${esc(S.name || 'You')} finished every ${GNAME[g]} lesson!</h1>
+      <p>Mastered so far: ${mast} of ${ids.length}. Keep passing your remember and mastery checks to master them all.</p>
       ${nx ? `<p>Next stop: <b>${GNAME[BYID[nx].g]}</b>, starting with ${esc(BYID[nx].title)}.</p>` : ''}
       <button class="btn block" data-act="toMap">See my path</button>
     </section>`; },
-  final: () => `<section class="cert">
+  final: () => { const mast = ORDER.filter(isMastered).length, all = mast === ORDER.length;
+    return `<section class="cert">
       ${IC.burst}
-      <p class="eyebrow">Math Path complete</p>
-      <h1>${esc(S.name || 'You')} mastered 3rd grade math!</h1>
-      <p>Every module from 1st grade to 3rd grade is done. ${S.stars} stars earned.</p>
+      <p class="eyebrow">${all ? 'Math Path complete' : 'Every lesson done'}</p>
+      <h1>${all ? `${esc(S.name || 'You')} mastered 3rd grade math!` : `${esc(S.name || 'You')} finished every lesson through 3rd grade!`}</h1>
+      <p>${all ? `All ${ORDER.length} skills mastered with 3 stars each.` : `Mastered: ${mast} of ${ORDER.length}. Keep passing your checks to master the rest.`}</p>
       <p class="small muted">${new Date(S.updatedAt || Date.now()).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-      <button class="btn block" data-act="toMapAll">Practice anything</button>
-    </section>`,
-  parent: () => parentHTML()
+      <button class="btn block" data-act="toMapAll">My path</button>
+    </section>`; },
+  parent: () => parentHTML(),
+  viewer: () => `<section class="card stack"><p class="eyebrow">Parent view</p><h1>${VSTATE.status === 'empty' ? 'No progress yet' : VSTATE.status === 'error' ? "Can't load her progress" : 'Loading her progress…'}</h1>${VSTATE.status === 'empty' ? '<p>Open Math Path on her tablet once so it can send her progress. Then tap Refresh.</p>' : VSTATE.status === 'error' ? `<p>${esc(VSTATE.err)}</p>` : ''}${VSTATE.status !== 'loading' ? '<div><button class="btn" data-act="vRefresh">Refresh</button></div>' : ''}</section>`
 };
 
+function fmtWhen(t) { return new Date(t).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+function syncCardHTML() {
+  const sy = S.sync;
+  if (!sy || !sy.url) return `<div class="card stack"><h2>See her progress on your phone</h2><p class="small muted">Right now her progress is saved only on this tablet. Paste your Firebase Realtime Database URL so this tablet sends her progress online. Then you'll get a private parent link to open on your phone.</p><div class="field"><label for="syncUrl">Database URL</label><input id="syncUrl" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://your-project-default-rtdb.firebaseio.com"></div>${DATA.syncErr ? `<p class="small" style="color:var(--retry);font-weight:700">${esc(DATA.syncErr)}</p>` : ''}<div><button class="btn" data-act="syncConnect">Connect</button></div></div>`;
+  const status = sy.err ? `<span class="pill need">Not sending</span> ${esc(sy.err)}` : sy.last ? `<span class="pill ok">Sending</span> Last sent ${fmtWhen(sy.last)}` : 'Connecting…';
+  return `<div class="card stack"><h2>See her progress on your phone</h2><p>${status}</p><p class="small muted">Open this parent link on your phone. Keep it private, because anyone with it can see her progress.</p><div class="prompt-box" id="plink">${esc(parentLink())}</div><div class="row"><button class="btn" data-act="copyLink">Copy parent link</button><button class="btn ghost" data-act="syncNow">Send now</button><button class="btn ghost" data-act="syncOff">Disconnect</button></div></div>`;
+}
 function parentHTML() {
   const ans = S.assess.answers, has = ans.length > 0, done = !!S.assess.doneAt;
-  const totalDone = ORDER.filter(id => S.mods[id] && isDone(id)).length;
-  const c = S.phase === 'path' ? currentId() : null;
-  let h = `<section class="stack">
-    <div class="row" style="justify-content:space-between"><h1>Parent view</h1><button class="btn ghost" data-act="closeParent">Back</button></div>`;
+  const c = S.phase === 'path' ? currentId() : null, who = esc(S.name || 'Her');
+  const fmtD = t => new Date(t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  let h = `<section class="stack">`;
+  if (VIEW) h += `<div class="card stack"><p class="eyebrow">Parent view</p><h1>${who}'s progress</h1><p class="small muted">Sent from her tablet ${VSTATE.updatedAt ? fmtWhen(VSTATE.updatedAt) : ''}. This page refreshes every minute.${VSTATE.err ? ` <b style="color:var(--retry)">Last refresh failed: ${esc(VSTATE.err)}</b>` : ''}</p><div><button class="btn ghost" data-act="vRefresh">Refresh now</button></div></div>`;
+  else h += `<div class="row" style="justify-content:space-between"><h1>Parent view</h1><button class="btn ghost" data-act="closeParent">Back</button></div>`;
+
+  // where she is
   h += `<div class="card stack"><h2>Where ${esc(S.name || 'she')} is</h2>`;
   if (S.phase === 'welcome') h += `<p>The 1st grade check hasn't started yet.</p>`;
   else if (S.phase === 'assess') h += `<p>Taking the 1st grade check: ${ans.length} of ${ASSESS_N} answered.</p>`;
-  else h += `<p><b>${totalDone} of ${ORDER.length}</b> modules done${c ? `. Current: <b>${esc(BYID[c].title)}</b> (${GNAME[BYID[c].g]})` : '. Path complete.'}</p>`;
-  for (const g of [1, 2, 3]) { const ids = ORDER.filter(id => BYID[id].g === g), d = ids.filter(id => S.mods[id] && isDone(id)).length; h += `<div><div class="row" style="justify-content:space-between"><span class="small"><b>${GNAME[g]}</b></span><span class="small muted">${d} of ${ids.length}</span></div><div class="bar"><i style="width:${d / ids.length * 100}%"></i></div></div>`; }
-  h += `<p class="small muted">Progress is saved ${saveWhere === 'account' ? 'to your Claude account, so it carries across your devices.' : 'on this device.'}</p></div>`;
+  else { const rv = dueReview(), cs = c ? mstate(c) : null;
+    const curStage = !cs ? '' : cs.stage === 'check' ? (cs.placed ? `needs its ${CHECK_N}-question check` : `ready for its ${CHECK_N}-question check`) : cs.stage === 'practice' ? `practicing, ${Math.min(cs.streak, PRACTICE_TARGET)} of ${PRACTICE_TARGET} in a row` : 'lesson not started';
+    h += `<p><b>${ORDER.filter(isMastered).length} of ${ORDER.length}</b> skills mastered with 3 stars. <b>${ORDER.filter(isDone).length}</b> learned so far.${c ? ` Working on <b>${esc(BYID[c].title)}</b> (${GNAME[BYID[c].g]}): ${esc(curStage)}.` : ' Every lesson is done.'}${rv ? ` Check due: <b>${esc(BYID[rv].title)}</b> (${REVIEW_LABEL[reviewKind(rv)].toLowerCase()}).` : ''}</p>`; }
+  for (const g of [1, 2, 3]) { const ids = ORDER.filter(id => BYID[id].g === g), d = ids.filter(isDone).length, mm = ids.filter(isMastered).length; h += `<div><div class="row" style="justify-content:space-between"><span class="small"><b>${GNAME[g]}</b></span><span class="small muted">${mm} mastered · ${d} learned of ${ids.length}</span></div><div class="bar"><i style="width:${d / ids.length * 100}%"></i></div></div>`; }
+  if (!VIEW) h += `<p class="small muted">${S.sync && S.sync.url ? 'Saved on this tablet and sent to your parent link.' : 'Saved on this tablet only. Connect a database below to see it on your phone.'}</p>`;
+  h += `</div>`;
+
+  // practice time, last 7 days
   if (S.phase !== 'welcome') {
-    const w = weekStats(), g = goalMin();
-    h += `<div class="card stack"><h2>Practice time</h2>
-      <div class="statrow"><div class="stat"><b>${w.today} min</b><span>today (goal ${g})</span></div><div class="stat"><b>${w.met} of 7</b><span>days goal met</span></div><div class="stat"><b>${w.avg} min</b><span>daily average, last 7 days</span></div><div class="stat"><b>${w.streak}</b><span>${pl(w.streak, 'day')} in a row at goal</span></div></div>
-      <div class="tablewrap"><table class="ptable"><thead><tr><th>Day</th><th>Minutes</th><th></th></tr></thead><tbody>`;
-    for (let i = 0; i < 14; i++) { const d = new Date(); d.setDate(d.getDate() - i); const mm = Math.floor(usedSec(dayKey(d)) / 60);
-      h += `<tr><td>${i === 0 ? 'Today' : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</td><td class="num">${mm}</td><td>${mm >= g ? '<span class="pill ok">Goal met</span>' : mm > 0 ? `<span class="pill need">${g - mm} min short</span>` : '<span class="muted small">No practice</span>'}</td></tr>`; }
-    h += `</tbody></table></div>
-      <div class="row"><span>Daily goal</span><div class="seg" role="group" aria-label="Daily goal">${[15, 20, 30, 45].map(v => `<button data-act="setGoal" data-v="${v}" aria-pressed="${v === g}">${v} min</button>`).join('')}</div></div>
+    const w = weekStats(), g = goalMin(); let total = 0, rows = '';
+    for (let i = 0; i < 7; i++) { const d = new Date(); d.setDate(d.getDate() - i); const mm = Math.floor(usedSec(dayKey(d)) / 60); total += mm;
+      rows += `<tr><td>${i === 0 ? 'Today' : i === 1 ? 'Yesterday' : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</td><td class="num">${mm} min</td><td>${mm >= g ? '<span class="pill ok">Goal met</span>' : mm > 0 ? `<span class="pill need">${g - mm} min short</span>` : '<span class="muted small">No practice</span>'}</td></tr>`; }
+    h += `<div class="card stack"><h2>Practice time, last 7 days</h2>
+      <div class="statrow"><div class="stat"><b>${w.today} min</b><span>today (goal ${g})</span></div><div class="stat"><b>${w.met} of 7</b><span>days goal met</span></div><div class="stat"><b>${total} min</b><span>total this week</span></div><div class="stat"><b>${w.avg} min</b><span>daily average</span></div></div>
+      <div class="tablewrap"><table class="ptable"><thead><tr><th>Day</th><th>Time</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      ${VIEW ? '' : `<div class="row"><span>Daily goal</span><div class="seg" role="group" aria-label="Daily goal">${[15, 20, 30, 45].map(v => `<button data-act="setGoal" data-v="${v}" aria-pressed="${v === g}">${v} min</button>`).join('')}</div></div>`}
       <p class="small muted">Only counts time she's using it. The timer pauses after 2½ minutes without a tap and while Parent view is open.</p></div>`;
   }
-  h += `<div class="card stack"><h2>Send her progress to Claude</h2><p class="small muted">Copy this and paste it at the start of a chat in your Project. Claude then knows her level and her recent mistakes, and skips the placement check.</p><div class="prompt-box" id="cardText">${esc(buildCard())}</div><div><button class="btn" data-act="copyCard">Copy progress card</button></div></div>`;
+
+  // skills progress
+  if (S.phase !== 'welcome' && S.phase !== 'assess') {
+    const cnt = { m: 0, l: 0, p: 0, c: 0 }; ORDER.forEach(id => { const s = mstate(id); if (s.stars >= 3) cnt.m++; else if (s.stars >= 1) cnt.l++; else if (s.stage === 'practice') cnt.p++; else if (s.stage === 'check') cnt.c++; });
+    h += `<div class="card stack"><h2>Skills progress</h2>
+      <div class="statrow"><div class="stat"><b>${cnt.m}</b><span>mastered (3 stars)</span></div><div class="stat"><b>${cnt.l}</b><span>learned, still proving it</span></div><div class="stat"><b>${cnt.p}</b><span>practicing</span></div><div class="stat"><b>${cnt.c}</b><span>waiting for a check</span></div></div>
+      <p class="small muted">How a skill gets mastered: lesson and worked example → practice until ${PRACTICE_TARGET} in a row with no hints → ${CHECK_N}-question check, ${CHECK_PASS} right = Learned (1 star) → remember check ${GAP_REMEMBER} days later, ${REVIEW_PASS} of ${REVIEW_N} = Remembered (2 stars) → mastery check about a week after that, ${REVIEW_PASS} of ${REVIEW_N} = Mastered (3 stars). Then quick ${KEEP_N}-question reviews about 30, 60 and 120 days later. Any missed check sends the skill back to practice. Skills she knew on the 1st grade check skip the lesson but still have to pass every check.</p>
+      <div class="tablewrap"><table class="ptable"><thead><tr><th>Skill</th><th>Status</th><th>Checks</th></tr></thead><tbody>`;
+    let lastG = 0;
+    for (const id of ORDER) { const m = BYID[id], s = mstate(id);
+      if (m.g !== lastG) { lastG = m.g; h += `<tr><td colspan="3" class="small muted" style="padding-top:14px"><b>${GNAME[m.g]}</b></td></tr>`; }
+      const lastRev = (s.reviews || []).slice(-1)[0], failed = lastRev && (lastRev.ok === false || (lastRev.ok === undefined && lastRev.s < 3));
+      const pill = s.stars >= 1 ? `<span class="pill ${s.stars >= 3 ? 'gold' : 'ok'}">${STAR_NAME[s.stars]} ${'★'.repeat(s.stars)}</span>${s.due ? `<div class="miss">${REVIEW_LABEL[reviewKind(id)]}: ${s.due <= Date.now() ? 'due now' : fmtD(s.due)}</div>` : ''}`
+        : s.stage === 'check' ? (s.placed ? '<span class="pill ok">Knew it · needs check</span>' : '<span class="pill on">Ready for check</span>')
+        : s.stage === 'practice' ? `<span class="pill on">Practicing · ${Math.min(s.streak, PRACTICE_TARGET)}/${PRACTICE_TARGET} in a row</span>`
+        : id === c ? '<span class="pill on">Up next</span>' : '<span class="pill lock">Later</span>';
+      const note = failed && s.stars === 0 ? `<div class="miss">Missed a check ${fmtD(lastRev.d)}</div>` : '';
+      const all = [...s.checks, ...(s.reviews || [])].sort((a, b) => a.d - b.d).slice(-4);
+      h += `<tr><td>${esc(m.title)}${note}</td><td>${pill}</td><td class="checks">${all.length ? all.map(x => `${x.s}/${x.n}`).join(', ') : '<span class="muted">–</span>'}</td></tr>`; }
+    h += `</tbody></table></div></div>`;
+  }
+
+  if (!VIEW) h += syncCardHTML();
+
+  h += `<div class="card stack"><h2>Send her progress to Claude</h2><p class="small muted">Copy this and paste it at the start of a chat in your Math Tutor Project. Claude then knows her level and her recent mistakes, and skips the placement check.</p><div class="prompt-box" id="cardText">${esc(buildCard())}</div><div><button class="btn" data-act="copyCard">Copy progress card</button></div></div>`;
 
   if (has) {
-    h += `<div class="card stack"><h2>1st grade check results</h2><p class="small muted">2 questions per skill. Both right means she skips that module.${done ? '' : ' Check still in progress.'}</p><div class="tablewrap"><table class="ptable"><thead><tr><th>Skill</th><th>Score</th></tr></thead><tbody>`;
+    h += `<div class="card stack"><h2>1st grade check results</h2><p class="small muted">2 questions per skill. Both right means she skips that skill's lessons, but she still has to pass all of its checks.${done ? '' : ' Check still in progress.'}</p><div class="tablewrap"><table class="ptable"><thead><tr><th>Skill</th><th>Score</th></tr></thead><tbody>`;
     for (const id of G1) { const rs = ans.filter(a => a.s === id); if (!rs.length) continue; const ok = rs.filter(a => a.ok).length;
       const misses = rs.filter(a => !a.ok).map(a => `<div class="miss">${esc(a.q)} · answered <b>${esc(a.given)}</b> · correct ${esc(a.ans)}</div>`).join('');
       h += `<tr><td><b>${esc(BYID[id].title)}</b>${misses}</td><td class="num">${ok}/${rs.length} ${rs.length === 2 ? (ok === 2 ? '<span class="pill ok">Knew it</span>' : '<span class="pill need">Teach it</span>') : ''}</td></tr>`; }
     h += `</tbody></table></div></div>`;
   }
 
-  if (S.phase !== 'welcome' && S.phase !== 'assess') {
-    h += `<div class="card stack"><h2>Module plan</h2><p class="small muted">In teaching order. A module is mastered after 2 passed rounds in a row (3 of 4 right on the first try).</p><div class="tablewrap"><table class="ptable"><thead><tr><th>Module</th><th>Status</th><th>First-try</th></tr></thead><tbody>`;
-    let lastG = 0;
-    for (const id of ORDER) { const m = BYID[id], s = mstate(id);
-      if (m.g !== lastG) { lastG = m.g; h += `<tr><td colspan="3" class="small muted" style="padding-top:14px"><b>${GNAME[m.g]}</b></td></tr>`; }
-      const pill = s.st === 'placed' ? '<span class="pill ok">Knew it</span>' : s.st === 'mastered' ? '<span class="pill gold">Mastered</span>' : id === c ? `<span class="pill on">Current${s.rounds ? ` · ${s.rounds} ${pl(s.rounds, 'round')}` : ''}</span>` : '<span class="pill lock">Later</span>';
-      h += `<tr><td>${esc(m.title)}</td><td>${pill}</td><td class="num">${s.asked ? `${Math.round(s.right / s.asked * 100)}% <span class="muted">(${s.right}/${s.asked})</span>` : '<span class="muted">–</span>'}</td></tr>`; }
-    h += `</tbody></table></div></div>`;
-  }
-
   if (S.hist.length) {
-    h += `<div class="card stack"><h2>Recent rounds</h2><div class="tablewrap"><table class="ptable"><thead><tr><th>When</th><th>Module</th><th>Score</th></tr></thead><tbody>`;
-    for (const r of S.hist.slice(-12).reverse()) h += `<tr><td class="num">${new Date(r.d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</td><td>${esc(BYID[r.id] ? BYID[r.id].title : r.id)}${r.p ? ' <span class="muted small">(practice)</span>' : ''}</td><td class="num">${r.s}/4</td></tr>`;
+    h += `<div class="card stack"><h2>Recent rounds</h2><div class="tablewrap"><table class="ptable"><thead><tr><th>When</th><th>Skill</th><th>Score</th></tr></thead><tbody>`;
+    for (const r of S.hist.slice(-12).reverse()) h += `<tr><td class="num">${fmtWhen(r.d)}</td><td>${esc(BYID[r.id] ? BYID[r.id].title : r.id)} <span class="muted small">${r.k ? KLABEL[r.k] : 'Practice'}</span></td><td class="num">${r.s}/${r.n || 4}</td></tr>`;
     h += `</tbody></table></div></div>`;
   }
 
-  h += `<div class="card stack"><h2>Settings</h2>
+  if (!VIEW) h += `<div class="card stack"><h2>Settings</h2>
     ${CAN_SPEAK ? `<div class="toggle"><span>Read questions out loud</span><button class="switch" role="switch" aria-checked="${S.settings.speak}" data-act="toggleSpeak" aria-label="Read questions out loud"></button></div>` : ''}
     <div class="stack" style="gap:8px"><b>Start over</b><p class="small muted">Erases all progress and retakes the 1st grade check.</p>
     ${DATA.confirmReset ? `<div class="row"><button class="btn danger" data-act="resetYes">Yes, erase everything</button><button class="btn ghost" data-act="resetNo">Cancel</button></div>` : `<div><button class="btn ghost" data-act="resetAsk">Retake the 1st grade check</button></div>`}</div>
   </div>`;
 
-  h += `<div class="card stack"><h2>Claude Project instructions</h2><p class="small muted">Paste these into a Project's instructions so chats follow the same plan as this app.</p><div class="prompt-box" id="projText">${esc(PROJECT_TEXT)}</div><div><button class="btn ghost" data-act="copyProj">Copy instructions</button></div></div>`;
+  h += `<div class="card stack"><h2>Claude Project instructions</h2><p class="small muted">Paste these into your Math Tutor Project's instructions so chats follow the same plan as this app.</p><div class="prompt-box" id="projText">${esc(PROJECT_TEXT)}</div><div><button class="btn ghost" data-act="copyProj">Copy instructions</button></div></div>`;
   h += `</section>`;
   return h;
 }
 
 function buildCard() {
-  const nm = S.name || 'my daughter', L = [];
+  const nm = S.name || 'my daughter', L = [], fmtD = t => new Date(t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   L.push(`MATH PATH PROGRESS CARD for ${nm} (${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })})`);
   L.push('Use this as her current level. Skip the placement check.');
   L.push('');
@@ -1238,20 +1425,31 @@ function buildCard() {
   if (S.phase === 'welcome') L.push('She has not taken the 1st grade check yet.');
   else {
     if (!S.assess.doneAt) L.push(`1st grade check in progress: ${ans.length} of ${ASSESS_N} answered.`);
-    const knew = G1.filter(id => S.mods[id] && S.mods[id].st === 'placed').map(id => BYID[id].title);
-    const needed = G1.filter(id => { const rs = ans.filter(a => a.s === id); return rs.length === 2 && !rs.every(a => a.ok); }).map(id => BYID[id].title);
-    if (S.assess.doneAt) { L.push(`1st grade check: knew ${knew.length} of ${G1.length} skills.`); L.push(`Knew: ${knew.join(', ') || 'none'}.`); L.push(`Needed: ${needed.join(', ') || 'none'}.`); }
+    if (S.assess.doneAt) {
+      const both = id => { const rs = ans.filter(a => a.s === id); return rs.length === 2 && rs.every(a => a.ok); };
+      const knew = G1.filter(both).map(id => BYID[id].title), needed = G1.filter(id => !both(id)).map(id => BYID[id].title);
+      L.push(`1st grade check: both questions right on ${knew.length} of ${G1.length} skills.`);
+      L.push(`Knew on the check: ${knew.join(', ') || 'none'}.`); L.push(`Needed: ${needed.join(', ') || 'none'}.`);
+    }
     const missedCheck = ans.filter(a => !a.ok);
     if (missedCheck.length) { L.push(''); L.push('Missed on the check:'); missedCheck.slice(0, 10).forEach(a => L.push(`- ${BYID[a.s].title}: "${a.q}" She answered ${a.given}. Correct: ${a.ans}.`)); }
   }
   if (S.assess.doneAt) {
-    const mastered = ORDER.filter(id => S.mods[id] && S.mods[id].st === 'mastered').map(id => BYID[id].title);
-    L.push(''); L.push(`Mastered in the app: ${mastered.join(', ') || 'none yet'}.`);
+    L.push(''); L.push(`Mastered (3 stars: passed the ${CHECK_N}-question check, a remember check, and a mastery check a week later): ${ORDER.filter(isMastered).map(id => BYID[id].title).join(', ') || 'none yet'}.`);
+    const prov = ORDER.filter(id => isDone(id) && !isMastered(id)); if (prov.length) L.push(`Learned, still proving it: ${prov.map(id => { const m = mstate(id); return `${BYID[id].title} (${m.stars} ${pl(m.stars, 'star')}, ${REVIEW_LABEL[reviewKind(id)].toLowerCase()} ${m.due && m.due <= Date.now() ? 'due now' : m.due ? fmtD(m.due) : 'soon'})`; }).join('; ')}.`);
     const c = currentId();
-    if (c) { const m = mstate(c); L.push(`Current module: ${BYID[c].title} (${GNAME[BYID[c].g]}). ${BYID[c].can}${m.rounds ? ` So far: ${m.rounds} ${pl(m.rounds, 'round')}, ${m.right} of ${m.asked} right on the first try.` : ' Not started yet.'}`);
+    if (c) { const m = mstate(c);
+      const stage = m.stage === 'check' ? (m.placed ? `She knew it on the placement check but still needs to pass the ${CHECK_N}-question check.` : `She finished practice and is ready for the ${CHECK_N}-question check.`) : m.stage === 'practice' ? `Practicing: ${Math.min(m.streak, PRACTICE_TARGET)} of ${PRACTICE_TARGET} in a row with no hints.` : 'Not started yet.';
+      L.push(`Current module: ${BYID[c].title} (${GNAME[BYID[c].g]}). ${BYID[c].can} ${stage}`);
       const rest = ORDER.slice(ORDER.indexOf(c) + 1).filter(id => !isDone(id)); if (rest.length) L.push(`Up next: ${rest.slice(0, 3).map(id => BYID[id].title).join(', ')}${rest.length > 3 ? `, then ${rest.length - 3} more` : ''}.`); }
-    else L.push('She has finished every module through 3rd grade.');
-    const weak = ORDER.filter(id => { const m = S.mods[id]; return m && m.asked >= 4 && m.right / m.asked < .75; }).map(id => `${BYID[id].title} (${Math.round(S.mods[id].right / S.mods[id].asked * 100)}% first try)`);
+    else L.push('She has finished every lesson through 3rd grade.');
+    const checks = []; ORDER.forEach(id => mstate(id).checks.forEach(x => checks.push(Object.assign({ id }, x)))); checks.sort((a, b) => a.d - b.d);
+    if (checks.length) L.push(`Recent checks: ${checks.slice(-5).map(x => `${BYID[x.id].title} ${x.s}/${x.n} (${x.s >= (x.need || CHECK_PASS) ? 'passed' : 'not passed'}, ${fmtD(x.d)})`).join('; ')}.`);
+    const due = ORDER.filter(id => { const m = mstate(id); return m.stars >= 1 && m.due && m.due <= Date.now(); });
+    if (due.length) L.push(`Checks due: ${due.map(id => `${BYID[id].title} (${REVIEW_LABEL[reviewKind(id)].toLowerCase()})`).join(', ')}.`);
+    const forgot = ORDER.filter(id => { const r = (mstate(id).reviews || []).slice(-1)[0]; return r && (r.ok === false || (r.ok === undefined && r.s < 3)) && !isDone(id); });
+    if (forgot.length) L.push(`Missed a later check, back in practice: ${forgot.map(id => BYID[id].title).join(', ')}.`);
+    const weak = ORDER.filter(id => { const m = S.mods[id]; return m && m.asked >= 6 && m.right / m.asked < .75; }).map(id => `${BYID[id].title} (${Math.round(S.mods[id].right / S.mods[id].asked * 100)}% first try)`);
     if (weak.length) L.push(`Hardest so far: ${weak.join(', ')}.`);
     const w = weekStats(); L.push(`Practice time: ${w.today} min today (goal ${goalMin()}). Last 7 days: ${w.avg} min a day on average, goal met ${w.met} of 7 days.`);
     const recent = (S.miss || []).slice(-10);
@@ -1269,16 +1467,19 @@ No hints and no right/wrong during the check. After, list each skill as "Knows i
 If I paste a Math Path Progress Card, skip placement. Use the card as her current level: start from her current module and focus on the mistakes it lists.
 
 2) PLAN
-Teach only the 1st grade skills she missed, in the order above. Then teach every 2nd grade module, then every 3rd grade module, in order. Finish at 3rd grade mastery.
+For 1st grade skills she missed, teach the full module. For skills she knew, skip the lesson but still give the 10-question check, the remember check, and the mastery check before calling them mastered. Go in the order above. Then teach every 2nd grade module, then every 3rd grade module, in order. Finish at 3rd grade mastery.
 2nd grade: skip counting; place value to 1,000; comparing to 1,000; counting coins; adding with regrouping; subtracting with regrouping; time to 5 minutes and AM/PM; two-step story problems; dollars and cents; even and odd; equal groups and arrays; bar graphs; halves, thirds, fourths.
 3rd grade: rounding; adding and subtracting to 1,000; what multiplying means; times facts 0-5 and 10; time to the minute; times facts 6-9; division; fractions; multiply and divide story problems; elapsed time; comparing fractions; area; perimeter.
 
 3) EACH MODULE
-- Start with a short lesson: 3-4 short sentences and one worked example. Draw simple text pictures when they help.
-- Then ask 4 questions at a time. Make question 4 a review of an earlier skill.
-- Right: say so in one line. Wrong the first time: give a hint and let her try again. Wrong again: show the answer and why.
-- Only first tries count. 3 of 4 is a passed round. Two passed rounds in a row means mastered. Then move to the next module.
-- Two missed rounds in a row: teach the lesson again a different way.
+- Teach: a short lesson (3-4 short sentences), then show one worked example step by step ("watch me do one"). Use the hands-on materials below when they fit.
+- Practice: ask 4 questions at a time, and sometimes mix in a review of an earlier skill. She can ask for a hint. Wrong the first time: give a hint and let her try again. Wrong again: show the answer and why.
+- Keep practicing until she gets 8 in a row right on the first try with no hint. Only then is she ready for the check.
+- Check: 10 questions, no hints, one try each. 9 of 10 means LEARNED (1 star), and she can start the next module. Fewer than 9: teach it a different way, practice more, then give the check again.
+- Remember check: about 2 days later, 8 questions, no hints. 7 of 8 means REMEMBERED (2 stars).
+- Mastery check: about a week after that, 8 questions, no hints. 7 of 8 means MASTERED (3 stars). Only call a skill mastered after this.
+- Keep-sharp reviews: 5 quick questions about 30, 60 and 120 days after mastery. 4 of 5 keeps it mastered.
+- Any missed check: back to practice and the 10-question check for that skill, then earn the stars again.
 
 4) STYLE
 Short sentences and simple words a 1st grader can follow. Lots of encouragement. Never give the answer before she tries.
@@ -1296,26 +1497,33 @@ Whenever a lesson fits, have her use them so she can see and touch the math. Tel
 function labelFor(q, v) { if (q.type === 'num') return `${v}${q.unit ? (q.unit === '¢' ? '¢' : ' ' + q.unit) : ''}`; const c = q.choices.find(c => c.v === v); return (c && c.label) || v; }
 function qText(q) { return strip(`${q.story ? q.story + ' ' : ''}${q.ask} ${q.big || ''}`).slice(0, 170) + (q.desc ? ` [${q.desc}]` : ''); }
 function genUnique(id, avoid) { let q; for (let i = 0; i < 12; i++) { q = BYID[id].gen(); const key = strip((q.story || '') + q.ask + (q.big || '')); if (!avoid.includes(key)) { avoid.push(key); return q; } } return q; }
-function newRun(kind, id, qs) { RUN = { kind, id, qs, i: 0, tries: 0, first: [], input: '', fb: null, wrong: [], shake: false }; }
+function newRun(kind, id, qs) { RUN = { kind, id, qs, i: 0, tries: 0, first: [], input: '', fb: null, wrong: [], shake: false, hinted: false }; }
+function isFinal() { return !!(RUN && RUN.fb && RUN.fb.kind !== 'hint' && RUN.fb.kind !== 'hint0'); }
+const hintsOK = () => !!(RUN && (RUN.kind === 'practice' || RUN.kind === 'free'));
 function startAssessRound() {
   const n = S.assess.answers.length, r = Math.floor(n / 4), qs = [], avoid = [];
   for (let slot = r * 4; slot < r * 4 + 4; slot++) { const id = G1[Math.floor(slot / 2)]; const q = genUnique(id, avoid); q.skill = id; qs.push(q); }
   newRun('assess', null, qs); RUN.i = n - r * 4; RUN.first = Array(RUN.i).fill(true);
   go('q'); speak(RUN.qs[RUN.i].say);
 }
-function startRound(id, practice) {
+function startRound(id, kind) {
   const avoid = [], qs = [];
-  const idx = ORDER.indexOf(id);
-  const pool = practice ? [] : ORDER.slice(0, idx).filter(x => isDone(x));
-  const nMain = pool.length ? 3 : 4;
-  for (let i = 0; i < nMain; i++) qs.push(genUnique(id, avoid));
-  if (pool.length) { const rid = pick(pool), rq = genUnique(rid, avoid); rq.review = BYID[rid].title; rq.reviewId = rid; qs.push(rq); }
-  newRun(practice ? 'practice' : 'mod', id, qs);
+  let rk = null;
+  if (kind === 'check' || kind === 'review') { rk = kind === 'review' ? reviewKind(id) : null; const n = kind === 'check' ? CHECK_N : rk === 'keep' ? KEEP_N : REVIEW_N; for (let i = 0; i < n; i++) qs.push(genUnique(id, avoid)); }
+  else {
+    const pool = kind === 'practice' ? ORDER.slice(0, ORDER.indexOf(id)).filter(isDone) : [];
+    const mix = pool.length && Math.random() < .75;
+    for (let i = 0; i < (mix ? 3 : 4); i++) qs.push(genUnique(id, avoid));
+    if (mix) { const rid = pick(pool), rq = genUnique(rid, avoid); rq.review = BYID[rid].title; rq.reviewId = rid; qs.splice(rnd(1, qs.length), 0, rq); }
+    if (kind === 'practice') { const m = mstate(id); if (m.stage === 'learn') m.stage = 'practice'; }
+  }
+  newRun(kind, id, qs); RUN.rk = rk;
   go('q'); speak(RUN.qs[0].say);
 }
 const PRAISE = ['Yes! That is right.', 'Great job!', 'You got it!', 'Nice work!', 'Correct!'];
+function logMiss(q, given) { if (!S.miss) S.miss = []; S.miss.push({ id: q.reviewId || RUN.id, q: qText(q), given: String(labelFor(q, given)), ans: String(labelFor(q, q.answer)), k: RUN.kind, d: Date.now() }); if (S.miss.length > 40) S.miss = S.miss.slice(-40); }
 function submit(given) {
-  const q = RUN.qs[RUN.i]; if (RUN.fb && RUN.fb.kind !== 'hint') return;
+  const q = RUN.qs[RUN.i]; if (isFinal()) return;
   const ok = q.type === 'num' ? Number(given) === q.answer : given === q.answer;
   if (RUN.kind === 'assess') {
     S.assess.answers.push({ s: q.skill, ok, q: qText(q), given: String(labelFor(q, given)), ans: String(labelFor(q, q.answer)) });
@@ -1323,39 +1531,58 @@ function submit(given) {
     if (n % 4 === 0) { if (n >= ASSESS_N) finishAssess(); else { save(); go('assessBreak'); speak(`Round ${n / 4} done! Stand up and stretch.`); } return; }
     saveLocal(); RUN.i++; RUN.input = ''; toast('Got it!'); go('q'); speak(RUN.qs[RUN.i].say); return;
   }
+  const cur = !q.reviewId;
   if (ok) {
-    RUN.first.push(RUN.tries === 0);
-    RUN.fb = { kind: RUN.tries === 0 ? 'right' : 'fixed', msg: pick(PRAISE) };
+    const clean = RUN.tries === 0 && !RUN.hinted;
+    RUN.first.push(clean);
+    if (RUN.kind === 'practice' && cur) { const m = mstate(RUN.id); m.streak = clean ? m.streak + 1 : 0; }
+    RUN.fb = { kind: RUN.tries ? 'fixed' : 'right', msg: RUN.hinted && !RUN.tries ? 'Yes! Next time, try it without the hint.' : pick(PRAISE) };
     render(); speak(RUN.fb.kind === 'right' ? RUN.fb.msg : 'You fixed it!');
-  } else if (RUN.tries === 0) {
-    if (!S.miss) S.miss = [];
-    S.miss.push({ id: q.reviewId || RUN.id, q: qText(q), given: String(labelFor(q, given)), ans: String(labelFor(q, q.answer)), d: Date.now() }); if (S.miss.length > 40) S.miss = S.miss.slice(-40);
-    RUN.tries = 1; RUN.fb = { kind: 'hint' }; if (q.type === 'choice') RUN.wrong.push(given); RUN.input = ''; RUN.shake = true;
-    render(); RUN.shake = false; speak('Not quite. ' + q.hint);
-  } else {
-    RUN.first.push(false); RUN.fb = { kind: 'show' }; if (q.type === 'choice') RUN.wrong.push(given);
-    render(); speak('The answer is ' + answerSay(q) + '. ' + q.explain);
+    return;
   }
+  if (RUN.tries === 0) logMiss(q, given);
+  if (RUN.kind === 'practice') { if (cur) mstate(RUN.id).streak = 0; else { const rm = mstate(q.reviewId); if (rm.stars >= 1) rm.due = Math.min(rm.due || Infinity, Date.now()); } }
+  if (hintsOK() && RUN.tries === 0) {
+    RUN.tries = 1; RUN.fb = { kind: 'hint' }; if (q.type === 'choice') RUN.wrong.push(given); RUN.input = ''; RUN.shake = true;
+    render(); RUN.shake = false; speak('Not quite. ' + q.hint); return;
+  }
+  RUN.first.push(false); RUN.fb = { kind: 'show' }; if (q.type === 'choice') RUN.wrong.push(given);
+  render(); speak('The answer is ' + answerSay(q) + '. ' + q.explain);
 }
 function nextQ() {
-  hush(); RUN.i++; RUN.tries = 0; RUN.fb = null; RUN.input = ''; RUN.wrong = [];
+  hush(); RUN.i++; RUN.tries = 0; RUN.fb = null; RUN.input = ''; RUN.wrong = []; RUN.hinted = false;
   if (RUN.i < RUN.qs.length) { go('q'); speak(RUN.qs[RUN.i].say); return; }
   endRound();
 }
 function endRound() {
-  const score = RUN.first.filter(Boolean).length, id = RUN.id, practice = RUN.kind === 'practice';
-  S.hist.push({ id, d: Date.now(), s: score, p: practice ? 1 : 0 }); if (S.hist.length > 150) S.hist = S.hist.slice(-150);
-  if (practice) { save(); go('roundEnd', { id, score, practice: true }); speak(`${score} of 4 on the first try.`); return; }
-  const m = mstate(id); m.rounds++; m.asked += RUN.qs.length; m.right += score;
-  const pass = score >= 3; let relesson = false;
-  if (pass) { m.streak++; m.fails = 0; } else { m.streak = 0; m.fails++; if (m.fails >= 2) { relesson = true; m.fails = 0; } }
-  if (m.streak >= 2) { m.st = 'mastered'; m.at = Date.now(); S.stars++; if (!currentId()) S.phase = 'done'; save(); go('mastered', { id }); speak(`You mastered ${BYID[id].title}!`); return; }
-  save(); go('roundEnd', { id, score, pass, streak: m.streak, relesson }); speak(pass ? `${score} of 4! One more round like that.` : `${score} of 4. Let's try again.`);
+  const id = RUN.id, k = RUN.kind, n = RUN.qs.length, score = RUN.first.filter(Boolean).length, m = mstate(id), rk = RUN.rk;
+  S.hist.push({ id, d: Date.now(), s: score, n, k: k === 'review' ? rk : k }); if (S.hist.length > 150) S.hist = S.hist.slice(-150);
+  if (k === 'free') { save(); go('roundEnd', { id, k, score, n }); speak(`${score} of ${n} on the first try.`); return; }
+  if (k === 'practice') {
+    m.rounds++; RUN.qs.forEach((q, i) => { if (!q.reviewId) { m.asked++; if (RUN.first[i]) m.right++; } });
+    const ready = m.streak >= PRACTICE_TARGET; if (ready) m.stage = 'check';
+    save(); go('roundEnd', { id, k, score, n, ready }); speak(ready ? "You're ready for the check!" : `${Math.min(m.streak, PRACTICE_TARGET)} in a row. Keep practicing!`); return;
+  }
+  if (k === 'check') {
+    m.checks.push({ d: Date.now(), s: score, n, need: CHECK_PASS }); m.asked += n; m.right += score;
+    if (score >= CHECK_PASS) { m.stars = 1; m.st = 'learned'; m.learnedAt = m.at = Date.now(); m.due = inDays(GAP_REMEMBER); m.placed = false; m.keep = 0; if (!currentId()) S.phase = 'done'; save(); go('mastered', { id, score, n }); speak(`You learned ${BYID[id].title}! First star!`); return; }
+    m.stage = 'practice'; m.streak = 0; save(); go('roundEnd', { id, k, score, n, need: CHECK_PASS }); speak(`${score} of ${n}. Let's practice a little more.`); return;
+  }
+  const need = rk === 'keep' ? KEEP_PASS : REVIEW_PASS, pass = score >= need;
+  revToday().n++; m.reviews.push({ d: Date.now(), s: score, n, k: rk, ok: pass });
+  if (pass) {
+    if (rk === 'remember') { m.stars = 2; m.due = inDays(GAP_MASTER); }
+    else if (rk === 'master') { m.stars = 3; m.masteredAt = Date.now(); m.keep = 0; m.due = inDays(KEEP_GAPS[0]); }
+    else { m.keep++; m.due = inDays(KEEP_GAPS[Math.min(m.keep, KEEP_GAPS.length - 1)]); }
+    save(); go('roundEnd', { id, k, score, n, pass: true, rk, need }); speak(rk === 'remember' ? 'You remembered it! Second star!' : rk === 'master' ? `You mastered ${BYID[id].title}!` : 'Still sharp!'); return;
+  }
+  m.stars = 0; m.st = 'todo'; m.stage = 'practice'; m.streak = 0; m.due = null; m.keep = 0; if (S.phase === 'done') S.phase = 'path';
+  save(); go('roundEnd', { id, k, score, n, pass: false, rk, need }); speak("Let's practice this one again.");
 }
 function finishAssess() {
-  for (const id of G1) { const rs = S.assess.answers.filter(a => a.s === id); mstate(id).st = rs.length === 2 && rs.every(a => a.ok) ? 'placed' : 'todo'; }
+  for (const id of G1) { const rs = S.assess.answers.filter(a => a.s === id), m = mstate(id); m.st = 'todo'; if (rs.length === 2 && rs.every(a => a.ok)) { m.stage = 'check'; m.placed = true; } else { m.stage = 'learn'; m.placed = false; } }
   for (const id of ORDER) mstate(id);
-  S.assess.doneAt = Date.now(); S.phase = currentId() ? 'path' : 'done';
+  S.assess.doneAt = Date.now(); S.phase = 'path';
   save(); go('assessDone'); speak(`All done! Great work, ${S.name || 'friend'}.`);
 }
 
@@ -1369,16 +1596,24 @@ const ACT = {
   resetNo() { DATA.confirmReset = false; render(); },
   resetYes() { const keep = { name: S.name, speak: S.settings.speak }; S = fresh(); S.name = keep.name; S.settings.speak = keep.speak; RUN = null; PREV = null; save(); go('welcome'); },
   copyCard() { copyText(buildCard(), 'cardText'); },
+  syncConnect() { const el = document.getElementById('syncUrl'); const v = ((el && el.value) || '').trim().replace(/\/+$/, ''); if (!SYNC_URL_RE.test(v)) { DATA.syncErr = "That doesn't look like a Realtime Database URL. It starts with https:// and ends in firebaseio.com or firebasedatabase.app."; return render(); } const code = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join(''); S.sync = { url: v, code, last: 0, err: '' }; DATA.syncErr = ''; lastPush = 0; save(); render(); },
+  copyLink() { copyText(parentLink(), 'plink'); },
+  syncNow() { syncPush(); },
+  syncOff() { S.sync = null; save(); render(); },
+  vRefresh() { viewerFetch(); },
   setGoal(d) { S.settings.goal = Number(d.v); save(); render(); },
   copyProj() { copyText(PROJECT_TEXT, 'projText'); },
   say() { if (RUN) speak(RUN.qs[RUN.i].say, true); },
-  sayLesson(d) { const m = BYID[d.id]; speak(`${m.title}. ${m.lesson.steps.join(' ')}`, true); },
+  sayLesson(d) { const m = BYID[d.id], ex = DATA.ex; speak(`${m.title}. ${m.lesson.steps.join(' ')}${ex ? ` Watch me do one. ${strip(ex.say)} The answer is ${answerSay(ex)}. ${strip(ex.explain)}` : ''}${HANDS[d.id] ? ' Try it with your things at home. ' + HANDS[d.id] : ''}`, true); },
+  anotherEx() { if (SCREEN !== 'lesson') return; DATA.ex = genUnique(DATA.id, []); render(); },
+  hint() { if (!hintsOK() || RUN.fb) return; RUN.hinted = true; RUN.fb = { kind: 'hint0' }; render(); speak(RUN.qs[RUN.i].hint); },
+  back() { const f = backAction(); if (f) f(); },
   assessGo() { startAssessRound(); },
   toMap() { hush(); RUN = null; go(S.phase === 'done' ? 'final' : 'map'); },
   toMapAll() { hush(); RUN = null; go('map'); },
-  openMod(d) { hush(); const s = mstate(d.id); go('lesson', { id: d.id, practice: s.st === 'placed' || s.st === 'mastered' }); },
-  startRound(d) { hush(); startRound(d.id, d.practice === '1'); },
-  key(d) { if (!RUN || (RUN.fb && RUN.fb.kind !== 'hint')) return; if (d.k === 'del') RUN.input = RUN.input.slice(0, -1); else if (RUN.input.length < 4) RUN.input = (RUN.input === '0' ? '' : RUN.input) + d.k; render(); },
+  openMod(d) { hush(); RUN = null; go('lesson', { id: d.id, ex: genUnique(d.id, []) }); },
+  startRound(d) { hush(); startRound(d.id, d.kind || 'practice'); },
+  key(d) { if (!RUN || isFinal()) return; if (d.k === 'del') RUN.input = RUN.input.slice(0, -1); else if (RUN.input.length < 4) RUN.input = (RUN.input === '0' ? '' : RUN.input) + d.k; render(); },
   check() { if (RUN && RUN.input !== '') submit(RUN.input); },
   choose(d) { if (RUN) submit(d.v); },
   next() { nextQ(); },
@@ -1388,13 +1623,44 @@ document.addEventListener('click', e => { const t = e.target.closest('[data-act]
 document.addEventListener('submit', e => { if (e.target.id === 'nameForm') { e.preventDefault(); const v = (document.getElementById('nameInput').value || '').trim().slice(0, 20); S.name = v; S.phase = 'assess'; S.assess.startedAt = Date.now(); save(); go('assessIntro'); speak(`Hi ${v || 'friend'}! This check has ${ASSESS_N} questions. Just try your best.`); } });
 document.addEventListener('keydown', e => {
   if (SCREEN !== 'q' || !RUN || e.target.tagName === 'INPUT') return;
-  const q = RUN.qs[RUN.i], final = RUN.fb && RUN.fb.kind !== 'hint';
+  const q = RUN.qs[RUN.i], final = isFinal();
   if (final && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); return nextQ(); }
   if (final || q.type !== 'num') return;
   if (/^[0-9]$/.test(e.key)) { ACT.key({ k: e.key }); e.preventDefault(); }
   else if (e.key === 'Backspace') { ACT.key({ k: 'del' }); e.preventDefault(); }
   else if (e.key === 'Enter') { ACT.check(); e.preventDefault(); }
 });
+
+/* ================= sync to parent phone ================= */
+const VIEW = (() => { const m = location.hash.match(/^#view=([A-Za-z0-9]{24,64})@([A-Za-z0-9.-]+\.(?:firebaseio\.com|firebasedatabase\.app))$/i); return m ? { code: m[1], url: 'https://' + m[2] } : null; })();
+let syncTimer = null, lastPush = 0, VSTATE = { status: 'loading', err: '', updatedAt: 0 };
+const SYNC_URL_RE = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.(firebaseio\.com|firebasedatabase\.app)$/i;
+const syncEndpoint = sy => `${sy.url}/families/${sy.code}.json`;
+function parentLink() { return `${location.origin}${location.pathname}#view=${S.sync.code}@${S.sync.url.replace(/^https:\/\//i, '')}`; }
+function syncErrText(e, status) { if (status === 401 || status === 403) return 'Permission denied. Check the database rules (Part 1, step 6).'; if (status === 404) return 'Database not found. Check the URL.'; if (status) return `The database answered with error ${status}.`; return 'Could not reach the database. Check the URL and the internet connection.'; }
+async function syncPush(keep) {
+  if (VIEW || !S || !S.sync || !S.sync.url) return;
+  clearTimeout(syncTimer); syncTimer = null; lastPush = Date.now();
+  const body = JSON.stringify({ data: JSON.stringify(S), updatedAt: S.updatedAt || Date.now(), v: 2 });
+  let status = 0;
+  try { const r = await fetch(syncEndpoint(S.sync), { method: 'PUT', body, keepalive: !!keep && body.length < 60000 }); status = r.status; if (!r.ok) throw new Error('http'); S.sync.last = Date.now(); S.sync.err = ''; }
+  catch (e) { S.sync.err = syncErrText(e, status); }
+  saveLocal(); if (SCREEN === 'parent') render();
+}
+function syncSoon() { if (VIEW || !S || !S.sync || !S.sync.url) return; const wait = Math.max(0, 20000 - (Date.now() - lastPush)); if (wait === 0) syncPush(); else if (!syncTimer) syncTimer = setTimeout(() => syncPush(), wait); }
+async function viewerFetch() {
+  let status = 0;
+  try {
+    const r = await fetch(syncEndpoint(VIEW), { cache: 'no-store' }); status = r.status; if (!r.ok) throw new Error('http');
+    const j = await r.json();
+    if (!j || !j.data) { VSTATE = { status: 'empty', err: '', updatedAt: 0 }; if (SCREEN !== 'parent') go('viewer'); return; }
+    S = migrate(JSON.parse(j.data)); VSTATE = { status: 'ok', err: '', updatedAt: j.updatedAt || S.updatedAt };
+    if (SCREEN === 'parent') render(); else go('parent');
+  } catch (e) {
+    VSTATE.err = syncErrText(e, status);
+    if (SCREEN === 'parent') render(); else { VSTATE.status = 'error'; go('viewer'); }
+  }
+}
 
 /* ================= practice time ================= */
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -1419,7 +1685,7 @@ function weekStats() {
   return { avg: Math.round(mins.reduce((a, b) => a + b, 0) / 7), met: mins.filter(m => m >= g).length, streak, today: mins[0] };
 }
 setInterval(() => {
-  if (!S || document.visibilityState !== 'visible' || !TRACK.includes(SCREEN) || Date.now() - lastAct > IDLE_MS) return;
+  if (VIEW || !S || document.visibilityState !== 'visible' || !TRACK.includes(SCREEN) || Date.now() - lastAct > IDLE_MS) return;
   if (!S.usage) S.usage = {};
   const k = dayKey(), before = usedSec(k);
   S.usage[k] = before + TICK; unsaved += TICK;
@@ -1429,17 +1695,21 @@ setInterval(() => {
   else if (unsaved >= 60) { save(); unsaved = 0; }
   if (Math.floor(before / 60) !== Math.floor(S.usage[k] / 60)) updateGoalUI();
 }, TICK * 1000);
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S && unsaved) { save(); unsaved = 0; } });
+document.addEventListener('visibilitychange', () => {
+  if (VIEW) { if (document.visibilityState === 'visible') viewerFetch(); return; }
+  if (document.visibilityState === 'hidden' && S) { if (unsaved) { S.updatedAt = Date.now(); saveLocal(); unsaved = 0; } if (S.sync && S.sync.url) syncPush(true); }
+});
 
 /* ================= boot ================= */
 async function boot() {
+  if (VIEW) { go('viewer'); viewerFetch(); setInterval(() => { if (document.visibilityState === 'visible') viewerFetch(); }, 60000); return; }
   let local = null; try { local = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { }
-  if (local && local.v === 1) { S = local; go(homeScreen()); } else go('loading');
+  if (local && [1, 2, 3].includes(local.v)) { S = migrate(local); saveLocal(); go(homeScreen()); } else go('loading');
   const p = Promise.resolve(null);
   let db = null;
   if (!S) { const r = await Promise.race([p, sleep(3000).then(() => 'timeout')]); if (r === 'timeout') { S = fresh(); go('welcome'); db = await p; } else db = r; }
   else db = await p;
-  if (!db) { if (!S) { S = fresh(); go('welcome'); } return; }
+  if (!db) { if (!S) { S = fresh(); go('welcome'); } if (S.sync && S.sync.url) syncPush(); return; }
   DB = db;
   let remote = null;
   try { const snap = await db.doc('progress/main').get(); if (snap.exists) remote = JSON.parse(JSON.stringify(snap.data())); saveWhere = 'account'; } catch (e) { }
